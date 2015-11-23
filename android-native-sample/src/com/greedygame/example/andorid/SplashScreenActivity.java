@@ -97,10 +97,5 @@ public class SplashScreenActivity extends Activity {
 	    });
 	}
 	
-	
-	@Override
-	public void onDestroy(){
-		super.onDestroy();
-		ggAgent.onDestroy();
-	}
+
 }

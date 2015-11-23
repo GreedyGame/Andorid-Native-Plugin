@@ -8,9 +8,9 @@ import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.greedygame.android.AgentInitNotCalledException;
 import com.greedygame.android.FloatAdLayout;
 import com.greedygame.android.GreedyUtilities;
+import com.greedygame.android.exceptions.AgentInitNotCalledException;
 
 public class AnimatedActivity extends Activity {
    
@@ -27,16 +27,15 @@ public class AnimatedActivity extends Activity {
     	
     	/*** Fetching Float Ad unit ***/
     	floatAdlayout = new FloatAdLayout(this);
-	addContentView(floatAdlayout, new FrameLayout.LayoutParams(140, 140));
+    	addContentView(floatAdlayout, new FrameLayout.LayoutParams(140, 140));
 	
     	Log.i("GreedyGame Sample", "activePath "+themePath);
 		
     	try {
-		floatAdlayout.fetchHeadAd("unit-363", true);
-	} catch (AgentInitNotCalledException e) {
-		e.printStackTrace();
-	}
-    	
+    		floatAdlayout.fetchHeadAd("unit-363", true);
+		} catch (AgentInitNotCalledException e) {
+			e.printStackTrace();
+		}
     	
     	/*** Changing Native Ad units ***/
     	ImageView sun =  (ImageView) findViewById(R.id.sun);

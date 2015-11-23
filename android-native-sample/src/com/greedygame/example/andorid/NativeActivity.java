@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.FrameLayout;
 
-import com.greedygame.android.AgentInitNotCalledException;
 import com.greedygame.android.FloatAdLayout;
+import com.greedygame.android.exceptions.AgentInitNotCalledException;
 
 public class NativeActivity extends Activity {
 	
