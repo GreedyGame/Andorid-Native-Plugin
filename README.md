@@ -98,7 +98,7 @@ Set sdk into debug mode
 
 ----
 
-#### interface IAgentListner
+#### interface IAgentListener
 **Class Overview**
 
 It is used as a callback listener argument for GreedyGameAgent class
@@ -106,9 +106,11 @@ It is used as a callback listener argument for GreedyGameAgent class
 **Methods**
  
 ##### `void onInit(OnInitEvent response)`
+
 response value to indicate
-     * CAMPAIGN_NOT_AVAILABLE = using no campaign
-     * CAMPAIGN_AVAILABLE = Campaign is active 
+
+    CAMPAIGN_NOT_AVAILABLE = using no campaign
+    CAMPAIGN_AVAILABLE = Campaign is active 
 
 ##### `void onDownload()`
 Called when new branded contents are downloaded so that new scene can fetch assets from getActivePath().
@@ -117,7 +119,7 @@ Called when new branded contents are downloaded so that new scene can fetch asse
 
 This method needs to be used only if your game is targetting SDK version 23 or higher. This callback gives a list of permissions that are not available at runtime and is invoked after GreedyGameAgent initialization.
 
-NB : Only performs check for 4 dangerous permissions that are required by GreedyGameSDK.
+NB : Only performs check for 4 runtime permissions that are required by GreedyGameSDK.
 
 Permissions that are checked :
 
@@ -134,7 +136,7 @@ Called when there is a problem with downloading the units.
 For example
 
 ```java
-class GGListner implements IAgentListner{
+class GGListner implements IAgentListener{
     @Override
     public void onProgress(float progress) {
         //Use this for showing progress bar
@@ -150,7 +152,7 @@ class GGListner implements IAgentListner{
 
     @Override
     public void onInit(OnInitEvent response) {
-        if(    response == OnInitEvent.CAMPAIGN_CACHED || 
+        if(response == OnInitEvent.CAMPAIGN_CACHED || 
             response == OnInitEvent.CAMPAIGN_FOUND){
             isBranded = true;
         }else{
@@ -168,8 +170,11 @@ class GGListner implements IAgentListner{
 
 #### Manifest Requirement
 ```xml
+    
 <application>
 
+   <!-- GreedyGame SDK's requirements start -->
+   
     <activity
         android:name="com.greedygame.android.adhead.AdHeadActivity"
         android:configChanges="keyboardHidden|orientation|screenSize|screenLayout|layoutDirection"
@@ -177,7 +182,6 @@ class GGListner implements IAgentListner{
         android:theme="@style/Theme.Transparent">
     </activity>
 
-    <!-- GreedyGame SDK's requirements start -->
 
     <receiver
         android:name=".agent.GreedyRefReceiver"
@@ -189,10 +193,11 @@ class GGListner implements IAgentListner{
             <action android:name="com.greedygame.broadcast"/>
         </intent-filter>
     </receiver>
+    
+    <!-- GreedyGame SDK's requirements end -->
 
 </application>
 
-<!-- GreedyGame SDK's requirements end -->
 ```
 
 ---
