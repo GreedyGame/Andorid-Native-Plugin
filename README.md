@@ -170,6 +170,8 @@ class GGListner implements IAgentListner{
 
 #### Manifest Requirement
 ```xml
+<!-- GreedyGame SDK's requirements start -->
+
 <application>
 
     <activity
@@ -178,8 +180,6 @@ class GGListner implements IAgentListner{
         android:launchMode="singleTask"
         android:theme="@style/Theme.Transparent">
     </activity>
-
-    <!-- GreedyGame SDK's requirements start -->
 
     <receiver
         android:name=".agent.GreedyRefReceiver"
