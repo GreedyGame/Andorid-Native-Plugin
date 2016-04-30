@@ -13,9 +13,10 @@ You can download Android library project named, [greedy-game-agent](https://gith
 
 * Link android library project to build path
 * Put your gameprofile id in Android Xml values as string
+
     ```xml
     <resources>
-	    <string name="greedy_game_profile">11111111</string>
+        <string name="greedy_game_profile">11111111</string>
     </resources>
     ```
     
@@ -99,6 +100,7 @@ Set sdk into debug mode
 
 #### interface IAgentListner
 **Class Overview**
+
 It is used as a callback listener argument for GreedyGameAgent class
 
 **Methods**
@@ -125,7 +127,7 @@ Permissions that are checked :
     Manifest.permission.READ_PHONE_STATE
     NB : The above strings itself are returned in the argument if they are not available.
 
-void onError()
+#### `void onError()`
 
 Called when there is a problem with downloading the units.
 
