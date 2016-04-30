@@ -20,18 +20,18 @@ You can download Android library project named, [greedy-game-agent](https://gith
     ```
 ### Documentations
 #### GreedyGameAgent
-**Class Overview**
+**SDK Overview**
 
-Contains high-level classes encapsulating the overall GreedyGame ad flow and model.
+Install the GreedygameAgent in the Application
 
-**Public Constructors**
-##### `GreedyGameAgent(Activity gameActivity, IAgentListner greedyListner)`
+public GreedyGameAgent install(Activity activity, IAgentListener agentListener);
 
-Constructs a new instance of GreedyGame handler.
+    activity - Activity's instance
+    agentListener - IAgentListener interface
 
-----------
+---------
 
-**Method**
+**Methods**
 
 ##### `public void init(String []Units, FETCH_TYPE)`
 Lookup for new native campaign from server. 
@@ -61,7 +61,7 @@ Constructs a new instance of FloatAdLayout.
 
 ----------
 
-**Method**
+**Methods**
 
 ##### `public void fetchHeadAd(String unit_id) throws AgentInitNotCalledException`
 Fetch floating AdHead unit and add view to current context. 
@@ -90,24 +90,7 @@ try {
 ```
 
 ----
-**Analytics Methods**
-As the name suggest, put the following methods inside all branded activities.
 
-##### `public void onResume()`
-##### `public void onPause()`
-##### `public void onResume(String activityName)`
-##### `public void onPause(String activityName)`
-##### `public void onCustomEvent(String eventName)`
-
-For example
-```java
-@Override
-protected void onResume(){
-    super.onResume();
-    ggAgent.onResume(activityName);
-}
-```
-----
 **Other Utilities Methods**
 
 ##### `public String get_verison()`
@@ -116,127 +99,104 @@ Return sdk version
 ##### `public void setDebug(boolean b)`
 Set sdk into debug mode
 
----
+----
+
 #### interface IAgentListner
 **Class Overview**
 Is is used as callback listener argument for GreedyAgent class
 
 **Methods**
  
-##### `void onInit(OnINIT_EVENT response)`
+##### `void onInit(OnInitEvent response)`
      response value indicate
      * CAMPAIGN_NOT_AVAILABLE = using no campaign
-     * CAMPAIGN_CACHED = campaign already cached
-     * CAMPAIGN_FOUND = new campaign found to download
+     * CAMPAIGN_AVAILABLE = Campaign is active 
 
-##### `void onDownload(boolean success)`
-success true , If new branded contents are downloaded so that new scene can fetch assets from **getActivePath()**.
+##### `void onDownload()`
+Called when new branded contents are downloaded so that new scene can fetch assets from getActivePath().
 
+```
+#### `void unAvailablePermissions(ArrayList permissions)`
+
+This method needs to be used only if your game is targetting SDK version 23 or higher. This callback gives a list of permissions that are not available at runtime and is invoked after GreedyGameAgent initialization.
+
+NB : Only performs check for 4 dangerous permissions that are required by GreedyGameSDK.
+
+Permissions that are checked :
+
+Manifest.permission.ACCESS_COARSE_LOCATION
+Manifest.permission.WRITE_EXTERNAL_STORAGE
+Manifest.permission.GET_ACCOUNTS
+Manifest.permission.READ_PHONE_STATE
+NB : The above strings itself are returned in the argument if they are not available.
+
+void onError()
+
+Called when there is a problem with downloading the units.
 
 For example
 
-
-
 ```java
-class GG_Listner implements IAgentListner{
+class GGListner implements IAgentListner{
     @Override
     public void onProgress(float progress) {
         //Use this for showing progress bar
         Log.i("GreedyGame Sample", "Downloaded = "+progress+"%");
     }
-    
+
     @Override
-    public void onDownload(boolean success) {
+    public void onDownload() {
         if(success){
             isBranded = true;
         }
     }
 
     @Override
-    public void onInit(OnINIT_EVENT response) {
-        if(    response == OnINIT_EVENT.CAMPAIGN_CACHED || 
-            response == OnINIT_EVENT.CAMPAIGN_FOUND){
+    public void onInit(OnInitEvent response) {
+        if(    response == OnInitEvent.CAMPAIGN_CACHED || 
+            response == OnInitEvent.CAMPAIGN_FOUND){
             isBranded = true;
         }else{
             isBranded = false;
         }
     }
+
     @override
-     public void unAvailablePermissions(ArrayList<String> permissions) {
-			
-			
-		}
+    public void unAvailablePermissions(ArrayList<String> permissions) {
+
+
+    }
 }
-```
-##### unAvailablePermissions(ArrayList<String> permissions)
-* This method needs to be used only if your game is targetting SDK version 23 or
-  higher. This callback gives a list of permissions that are not available at runtime and is invoked after GreedyGameAgent initialization.
-
-  NB : Only performs check for 4 dangerous permissions that are required by GreedyGameSDK. 
-
-  Permissions that are checked : 
-
-   * Manifest.permission.ACCESS_COARSE_LOCATION
-   * Manifest.permission.WRITE_EXTERNAL_STORAGE
-   * Manifest.permission.GET_ACCOUNTS
-   * Manifest.permission.READ_PHONE_STATE
-
-   NB : The above strings itself are returned in the argument if they are not available.
-
 
 #### Manifest Requirement
-
 ```xml
-<!-- GreedyGame SDK's requirements start -->
-<activity
-    android:name="com.greedygame.android.AdHeadActivity"
-    android:theme="@style/Theme.Transparent" >
-</activity>
+<application>
 
-<receiver 
-    android:name="com.greedygame.android.GreedyRefReceiver" 
-    android:enabled="true" 
-    android:exported="true"
-    android:priority="100">
-    <intent-filter>
-        <action android:name="com.android.vending.INSTALL_REFERRER" />
-        <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-    </intent-filter>
-</receiver>
+    <activity
+        android:name="com.greedygame.android.adhead.AdHeadActivity"
+        android:configChanges="keyboardHidden|orientation|screenSize|screenLayout|layoutDirection"
+        android:launchMode="singleTask"
+        android:theme="@style/Theme.Transparent">
+    </activity>
 
-<receiver
-    android:name="com.greedygame.android.receivers.GreedyLoggingReceiver"
-    android:enabled="true"
-    android:exported="true"
-    android:priority="110">
-    <intent-filter>
-        <action android:name="com.greedygame.logon" />
-        <action android:name="com.greedygame.logoff" />
-    </intent-filter>
-</receiver>
+    <!-- GreedyGame SDK's requirements start -->
 
-<receiver
-    android:name="com.greedygame.android.receivers.GreedyAPIPathReceiver"
-    android:enabled="true"
-    android:exported="true"
-    android:priority="110">
-    <intent-filter>
-        <action android:name="com.greedygame.apipath" />
-    </intent-filter>
-</receiver>
+    <receiver
+        android:name=".agent.GreedyRefReceiver"
+        android:enabled="true"
+        android:exported="true">
+        <intent-filter>
+            <action android:name="com.android.vending.INSTALL_REFERRER"/>
+            <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            <action android:name="com.greedygame.broadcast"/>
+        </intent-filter>
+    </receiver>
 
-<receiver
-    android:name="com.greedygame.android.receivers.GreedyInstalledReceiver"
-    android:enabled="true"
-    android:exported="true"
-    android:priority="120">
-    <intent-filter>
-        <action android:name="com.greedygame.getack" />
-        <action android:name="com.greedygame.ack" />
-    </intent-filter>
-</receiver>​
+</application>
+
 <!-- GreedyGame SDK's requirements end -->
 ```
+
 ---
 ### Some helper functions
 To fetch drawable from android res
