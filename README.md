@@ -18,7 +18,7 @@ You can download Android library project named, [greedy-game-agent](https://gith
 	    <string name="greedy_game_profile">11111111</string>
     </resources>
     ```
-### Documentations
+#### Documentations
 #### GreedyGameAgent
 **SDK Overview**
 
@@ -74,8 +74,6 @@ Fetch floating AdHead unit and add view to current context.
 * diX, diY - Adjust dip cordinates in screen. 0,0 stands for top left.
 * AgentInitNotCalledException - throws exception if called before calling GreedyGameAgent's init callback.
  
-##### `public void removeAllHeadAd()`
-Hide floating AdHead with unit-id
 ```java
 /*** Fetching Float Ad unit ***/
 floatAdlayout = new FloatAdLayout(context);
