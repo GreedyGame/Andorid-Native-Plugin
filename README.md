@@ -1,4 +1,4 @@
-GreedyGame Android Native Integration Guide
+ GreedyGame Android Native Integration Guide
 ===================
 
 This is a complete guide to integrate GreedyGame plugin within your native android game. 
@@ -12,7 +12,7 @@ You can download Android library project named, [greedy-game-agent](https://gith
 #### Steps
 
 * Link android library project to build path
-* Put your gameprofile id in Android Xml values as string
+* Put your gameprofile id in Android xml values as string
 
     ```xml
     <resources>
@@ -24,7 +24,7 @@ You can download Android library project named, [greedy-game-agent](https://gith
 
 #### GreedyGameAgent
 
-Install the GreedygameAgent in the Application
+Install the GreedygameAgent in the activity
 
 ##### `public GreedyGameAgent install(Activity activity, IAgentListener agentListener);`
 
@@ -33,18 +33,20 @@ Install the GreedygameAgent in the Application
 **Methods**
 
 ##### `public void init(String []Units, FETCH_TYPE)`
-Lookup for new native campaign from server. 
+Lookup for an active campaign from the server. 
 
-* GameId - Unique game profile id from panel.greedygame.com
-* Units - List of relative path of assets used in games. 
-    Also register unit id can be used
-* FETCH_TYPE - it can be FETCH_TYPE.DOWNLOAD_BY_PATH or FETCH_TYPE.DOWNLOAD_BY_ID, to fetch units by relative path or u_id
+* **GameId** - Unique game profile id from panel.greedygame.com
+* **Units** - List of relative path of assets used in games. 
+    Also, register unit id can be used
+* **FetchType** - enum in values:
+	* FetchType.DOWNLOAD_BY_PATH  to fetch with relative path
+	* FetchType.DOWNLOAD_BY_ID to fetch with unit_id
     
-##### `public String activeTheme()`
-Return Theme id of currently active and running theme
+##### `public String activeCampaign()`
+Return campaign id of currently active and running campaign on device.
 
 ##### `public String getActivePath()`
- Return path of folder, where assets of activeTheme is stored.
+ Return path of folder, where assets of activeCampaign is stored.
 
 ----
 
@@ -65,22 +67,14 @@ Constructs a new instance of FloatAdLayout.
 ##### `public void fetchHeadAd(String unit_id) throws AgentInitNotCalledException`
 Fetch floating AdHead unit and add view to current context. 
 
-* unit_id - Float unit id from panel.greedygame.com (e.g 'float-123')
-* AgentInitNotCalledException - throws exception if called before calling GreedyGameAgent's init callback.
+* **unit_id** - Float unit id from panel.greedygame.com (e.g 'float-123')
+* **AgentInitNotCalledException** - throws exception if called before calling GreedyGameAgent's init callback.
     
-
-##### `public void fetchHeadAd(String unit_id, int diX, int diY) throws AgentInitNotCalledException`
-Fetch floating AdHead unit and add view to current context. 
-
-* unit_id - Float unit id from panel.greedygame.com (e.g 'float-123')
-* diX, diY - Adjust dip cordinates in screen. 0,0 stands for top left.
-* AgentInitNotCalledException - throws exception if called before calling GreedyGameAgent's init callback.
- 
 ```java
 /*** Fetching Float Ad unit ***/
 floatAdlayout = new FloatAdLayout(context);
 try {
-    floatAdlayout.fetchHeadAd("float-363");
+    floatAdlayout.fetchHeadAd("float-111");
 } catch (AgentInitNotCalledException e) {
     e.printStackTrace();
 }
@@ -115,11 +109,11 @@ response value to indicate
 ##### `void onDownload()`
 Called when new branded contents are downloaded so that new scene can fetch assets from getActivePath().
 
-#### `void unAvailablePermissions(ArrayList permissions)`
+#### `void onPermissionsUnavailable(ArrayList permissions)`
 
-This method needs to be used only if your game is targetting SDK version 23 or higher. This callback gives a list of permissions that are not available at runtime and is invoked after GreedyGameAgent initialization.
+This method needs to be used only if your game is targeting SDK version 23 or higher. This callback gives a list of permissions that are not available at runtime and is invoked after GreedyGameAgent initialization.
 
-NB : Only performs check for 4 runtime permissions that are required by GreedyGameSDK.
+**NB** : Only performs the check for 4 runtime permissions that are required by GreedyGameSDK.
 
 Permissions that are checked :
 
@@ -127,7 +121,7 @@ Permissions that are checked :
     Manifest.permission.WRITE_EXTERNAL_STORAGE
     Manifest.permission.GET_ACCOUNTS
     Manifest.permission.READ_PHONE_STATE
-    NB : The above strings itself are returned in the argument if they are not available.
+NB : The above strings itself are returned in the argument if they are not available.
 
 #### `void onError()`
 
@@ -161,7 +155,7 @@ class GGListner implements IAgentListener{
     }
 
     @override
-    public void unAvailablePermissions(ArrayList<String> permissions) {
+    public void onPermissionsUnavailable(ArrayList<String> permissions) {
 
 
     }
@@ -200,31 +194,11 @@ class GGListner implements IAgentListener{
 
 ```
 
----
-### Some helper functions
-To fetch drawable from android res
-
-```java
-public static Bitmap getBitmapByResid(GreedyGameAgent ggAgent, int resid){ 
-    if(GreedyGameAgent.gameActivity == null){
-        return null;
-    }
-
-    String resName = GreedyGameAgent.gameActivity.getApplicationContext().getResources().getResourceEntryName(resid);
-    File file = new File(ggAgent.getActivePath() + "/" + resName+".png");
-    if(file.exists()){
-        return BitmapFactory.decodeFile(file.getAbsolutePath());
-    }
-
-    return null;
-}
-```
 
 ---
 
 ### External Jars
-GreedyGame SDK uses Volley from Google and PriorityJobQueue from path as external jars. In case of conflicts you can remove it from libs folder of the wrapper. 
+GreedyGame SDK uses Volley from Google as external jars. In case of conflicts you can remove it from libs folder of the wrapper. 
 
 ### For Hello Tutorial, goto [andorid-native-sample](andorid-native-sample)  
 ### For more help please see [FAQ] (https://github.com/GreedyGame/unity-plugin/wiki/FAQs)
-
