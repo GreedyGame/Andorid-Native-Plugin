@@ -24,10 +24,7 @@ You can download Android library project named, [greedy-game-agent](https://gith
 
 Install the GreedygameAgent in the Application
 
-public GreedyGameAgent install(Activity activity, IAgentListener agentListener);
-
-    activity - Activity's instance
-    agentListener - IAgentListener interface
+##### `public GreedyGameAgent install(Activity activity, IAgentListener agentListener);`
 
 ---------
 
@@ -103,19 +100,18 @@ Set sdk into debug mode
 
 #### interface IAgentListner
 **Class Overview**
-Is is used as callback listener argument for GreedyAgent class
+It is used as a callback listener argument for GreedyGameAgent class
 
 **Methods**
  
 ##### `void onInit(OnInitEvent response)`
-     response value indicate
+response value to indicate
      * CAMPAIGN_NOT_AVAILABLE = using no campaign
      * CAMPAIGN_AVAILABLE = Campaign is active 
 
 ##### `void onDownload()`
 Called when new branded contents are downloaded so that new scene can fetch assets from getActivePath().
 
-```
 #### `void unAvailablePermissions(ArrayList permissions)`
 
 This method needs to be used only if your game is targetting SDK version 23 or higher. This callback gives a list of permissions that are not available at runtime and is invoked after GreedyGameAgent initialization.
@@ -170,8 +166,6 @@ class GGListner implements IAgentListner{
 
 #### Manifest Requirement
 ```xml
-<!-- GreedyGame SDK's requirements start -->
-
 <application>
 
     <activity
@@ -180,6 +174,8 @@ class GGListner implements IAgentListner{
         android:launchMode="singleTask"
         android:theme="@style/Theme.Transparent">
     </activity>
+
+    <!-- GreedyGame SDK's requirements start -->
 
     <receiver
         android:name=".agent.GreedyRefReceiver"
