@@ -18,8 +18,11 @@ You can download Android library project named, [greedy-game-agent](https://gith
 	    <string name="greedy_game_profile">11111111</string>
     </resources>
     ```
+    
 #### Documentations
+
 #### GreedyGameAgent
+
 **SDK Overview**
 
 Install the GreedygameAgent in the Application
